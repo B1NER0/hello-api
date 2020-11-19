@@ -55,7 +55,7 @@ async function locateUser(theEmail) {
    return user;
 }
 
-user login
+//user login
 app.post('/login', async (req, res) => {
     //Authenticate user
     const user = await authUser(req.body.email, req.body.password)
