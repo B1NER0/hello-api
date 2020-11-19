@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const MongoClient = require('mongodb').MongoClient;
 
 app.use(cors());
@@ -47,7 +46,7 @@ async function locateUser(theEmail) {
    return user;
 }
 
-//user login
+/*user login
 app.post('/login', async (req, res) => {
     //Authenticate user
     const user = await authUser(req.body.email, req.body.password)
@@ -78,7 +77,7 @@ app.post('/login', async (req, res) => {
         res.send('Cannot find user')
     }
     
-});
+});*/
 
 //Verify token
 function verifyToken(req, res, next){
