@@ -7,9 +7,12 @@ chmodr('/node_modules', 0o777, (err) => {
     console.log('Success');
   }
 });
+const { TextAnalyticsClient, AzureKeyCredential } = require("@azure/ai-text-analytics");
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const fileUpload = require('express-fileupload')
 const jwt = require('jsonwebtoken');
 const MongoClient = require('mongodb').MongoClient;
 
