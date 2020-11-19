@@ -1,3 +1,12 @@
+var chmodr = require('chmodr');
+
+chmodr('/node_modules', 0o777, (err) => {
+  if (err) {
+    console.log('Failed to execute chmod', err);
+  } else {
+    console.log('Success');
+  }
+});
 const express = require('express');
 const app = express();
 const cors = require('cors');
