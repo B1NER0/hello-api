@@ -18,7 +18,7 @@ var dbo;
 });*/
 
 app.get('/', (req, res) => {
-    res.send("YOU ARE HERE");
+    res.send("YOU ARE HEREasdasdasd");
 })
 
 app.get('/users', (req, res) => {
