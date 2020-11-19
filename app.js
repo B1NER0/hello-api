@@ -11,7 +11,7 @@ const { TextAnalyticsClient, AzureKeyCredential } = require("@azure/ai-text-anal
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const fileUpload = require('express-fileupload')
 const jwt = require('jsonwebtoken');
 const MongoClient = require('mongodb').MongoClient;
@@ -58,7 +58,7 @@ async function locateUser(theEmail) {
    return user;
 }
 
-//user login
+/*user login
 app.post('/login', async (req, res) => {
     //Authenticate user
     const user = await authUser(req.body.email, req.body.password)
@@ -89,7 +89,7 @@ app.post('/login', async (req, res) => {
         res.send('Cannot find user')
     }
     
-});
+});*/
 
 //Verify token
 function verifyToken(req, res, next){
@@ -129,7 +129,7 @@ app.get('/auth', verifyToken, (req, res) => {
     })
 })
 
-//Add new user to database with hashed password
+/*Add new user to database with hashed password
 app.post('/newUser', async (req, res) => {
     try{
         const salt = await bcrypt.genSalt();
@@ -150,7 +150,7 @@ app.post('/newUser', async (req, res) => {
         res.status(201).send("Something went wrong");
     }
 });
-
+*/
 
 //CLEAR uploads folder
 
