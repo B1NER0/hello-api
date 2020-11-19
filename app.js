@@ -1,4 +1,22 @@
-var port = process.env.PORT || 3000,
+const express = require('express');
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+    res.send("YOU ARE HERE");
+})
+
+app.get('/users', (req, res) => {
+    res.send('YOU HAVE REACHED USERS');
+})
+
+app.listen(PORT, () => {
+    console.log("Listening on port " + PORT)
+})
+
+
+/*var port = process.env.PORT || 3000,
     http = require('http'),
     fs = require('fs'),
     html = fs.readFileSync('index.html');
@@ -41,3 +59,4 @@ server.listen(port);
 
 // Put a friendly message on the terminal
 console.log('Server running at http://127.0.0.1:' + port + '/');
+*/
