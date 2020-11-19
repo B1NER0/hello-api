@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/users', (req, res) => {
-    res.send('YOU HAVE REACHED USERS');
+    res.status(200).send('YOU HAVE REACHED USERS');
 })
 
 app.listen(PORT, () => {
