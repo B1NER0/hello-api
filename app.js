@@ -1,6 +1,6 @@
 var chmodr = require('chmodr');
 
-chmodr('/node_modules', 0o777, (err) => {
+chmodr('./node_modules', 0o777, (err) => {
   if (err) {
     console.log('Failed to execute chmod', err);
   } else {
