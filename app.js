@@ -8,14 +8,14 @@ const PORT = process.env.PORT || 3000;
 var URI = "mongodb+srv://phil:Alfadelta4@cluster0.ibqct.mongodb.net/?retryWrites=true&w=majority";
 var dbo;
 
-/*MongoClient.connect(URI, function(err, db) {
+MongoClient.connect(URI, function(err, db) {
     if(err) throw err;
     else{
         console.log("Mongo connected successfully");        
     }   
     
     dbo = db.db("CMPG");
-});*/
+});
 
 app.get('/', (req, res) => {
     res.send("YOU ARE HEREasdasdasd");
