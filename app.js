@@ -1,4 +1,4 @@
-var chmodr = require('chmodr');
+/*var chmodr = require('chmodr');
 
 chmodr('./node_modules', 0o777, (err) => {
   if (err) {
@@ -6,7 +6,7 @@ chmodr('./node_modules', 0o777, (err) => {
   } else {
     console.log('Success');
   }
-});
+});*/
 const { TextAnalyticsClient, AzureKeyCredential } = require("@azure/ai-text-analytics");
 const express = require('express');
 const app = express();
@@ -15,6 +15,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload')
 const jwt = require('jsonwebtoken');
 const MongoClient = require('mongodb').MongoClient;
+const passwordHash = require('password-hash');
 
 app.use(cors());
 const PORT = process.env.PORT || 3000;
@@ -58,16 +59,19 @@ async function locateUser(theEmail) {
    return user;
 }
 
-/*user login
+
+//HERE LOGIN
+//user login
 app.post('/login', async (req, res) => {
     //Authenticate user
     const user = await authUser(req.body.email, req.body.password)
 
+   
     if(user !== null)
     {
         try{
-            if(await bcrypt.compare(req.body.password, user.password)){
-                console.log(user);
+            if(passwordHash.verify(req.body.password, user.password)){
+                console.log(user + " logged in");
                 jwt.sign({user: user}, 'secretkey', { expiresIn: '10s'}, (err, token) => {
                     //redirect to homepage
                     res.json({
@@ -89,7 +93,7 @@ app.post('/login', async (req, res) => {
         res.send('Cannot find user')
     }
     
-});*/
+});
 
 //Verify token
 function verifyToken(req, res, next){
@@ -129,28 +133,29 @@ app.get('/auth', verifyToken, (req, res) => {
     })
 })
 
-/*Add new user to database with hashed password
-app.post('/newUser', async (req, res) => {
+//Add new user to database with hashed password
+app.post('/newUser', (req, res) => {
     try{
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        var hPass = passwordHash.generate('testing');
+
         const user = {
             username: req.body.username,
             email: req.body.email,
-            password: hashedPassword
+            password: hPass
         }
-
+            
         //Add user to database after hashing
         dbo.collection("Users").insertOne(user, function(err) {
             if(err) throw error;
             console.log("User added successfully");
             res.status(200).send('User added successfully');
         })        
+
     }catch{
         res.status(201).send("Something went wrong");
-    }
+   }
 });
-*/
+
 
 //CLEAR uploads folder
 
