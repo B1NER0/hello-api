@@ -16,9 +16,16 @@ const fileUpload = require('express-fileupload')
 const jwt = require('jsonwebtoken');
 const MongoClient = require('mongodb').MongoClient;
 const passwordHash = require('password-hash');
+const bodyParser = require('body-parser');
 
 app.use(cors());
-const PORT = process.env.PORT || 3000;
+app.use(express.json());
+app.use(fileUpload({
+    createParentPath: true
+}))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+const PORT = process.env.PORT || 8080;
 
 var URI = "mongodb+srv://phil:Alfadelta4@cluster0.ibqct.mongodb.net/?retryWrites=true&w=majority";
 var dbo;
@@ -65,13 +72,12 @@ async function locateUser(theEmail) {
 app.post('/login', async (req, res) => {
     //Authenticate user
     const user = await authUser(req.body.email, req.body.password)
-
    
     if(user !== null)
     {
         try{
             if(passwordHash.verify(req.body.password, user.password)){
-                console.log(user + " logged in");
+                console.log(user.username + " logged in");
                 jwt.sign({user: user}, 'secretkey', { expiresIn: '10s'}, (err, token) => {
                     //redirect to homepage
                     res.json({
@@ -84,9 +90,8 @@ app.post('/login', async (req, res) => {
                 res.send('Not allowed');
             }
         }
-
-        catch{
-        res.status(500).send();
+        catch(err){
+            console.log(err)
         }       
     }
     else{
