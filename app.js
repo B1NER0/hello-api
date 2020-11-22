@@ -41,6 +41,11 @@ MongoClient.connect(URI, function(err, db) {
     dbo = db.db("CMPG");
 });
 
+
+app.get('/system/reboot', (req, res) => {
+    process.exit(1);
+})
+
 app.get('/', (req, res) => {
     res.send("Welcome to the classification API. Please make sure you are logged in");
 })
