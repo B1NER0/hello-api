@@ -420,7 +420,7 @@ app.get('/getClientData/:id', (req, res) => {
     var textract = require('textract');
 
     var fs = require('fs');
-	var files = fs.readdirSync('./uploads');
+	var files = fs.readdirSync('/uploads');
 	
 	if(files.length > 0){
 	
