@@ -20,6 +20,8 @@ const bodyParser = require('body-parser');
 const { parse } = require('path');
 const path = require('path');
 
+const uploadDir = '/home/ubuntu/hello-api/uploads';
+
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload({
@@ -420,13 +422,13 @@ app.get('/getClientData/:id', (req, res) => {
     var textract = require('textract');
 
     var fs = require('fs');
-	var files = fs.readdirSync('/uploads');
+	var files = fs.readdirSync(uploadDir);
 	
 	if(files.length > 0){
 	
     console.log('File to read: ' + files);
 
-    textract.fromFileWithPath('/uploads/' + files[0], function(error, text) {
+    textract.fromFileWithPath(uploadDir +'/' + files[0], function(error, text) {
         try{
             entityRecognition(textAnalyticsClient, text, res);
         }
