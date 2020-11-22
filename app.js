@@ -31,7 +31,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 const PORT = process.env.PORT || 8000;
 
-var URI = "mongodb+srv://phil:Alfadelta4@cluster0.ibqct.mongodb.net/?retryWrites=true&w=majority";
+var URI = "mongodb://admin:admin@3.85.37.138/CMPG?retryWrites=true&w=majority"//"mongodb+srv://phil:Alfadelta4@cluster0.ibqct.mongodb.net/?retryWrites=true&w=majority";
 var dbo;
 
 
@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/users', (req, res) => {
-    dbo.collection("Users").find({}).toArray(function(err, result){
+    dbo.collection("appUsers").find({}).toArray(function(err, result){
         if(err) throw err;
         res.status(200).send(result);
     });
@@ -64,7 +64,7 @@ async function authUser(theEmail, thePassword) {
 }; 
 
 async function locateUser(theEmail) {  
-   const user = await dbo.collection("Users").findOne({email: theEmail});
+   const user = await dbo.collection("appUsers").findOne({email: theEmail});
    return user;
 }
 
@@ -153,7 +153,7 @@ app.post('/newUser', (req, res) => {
         }
             
         //Add user to database after hashing
-        dbo.collection("Users").insertOne(user, function(err) {
+        dbo.collection("appUsers").insertOne(user, function(err) {
             if(err) throw error;
             console.log("User added successfully");
             res.status(200).send('User added successfully');
@@ -443,14 +443,11 @@ app.get('/getClientData/:id', (req, res) => {
 }
 }
 
-
-
 app.listen(PORT, '0.0.0.0' , () => {
     console.log("Listening on port with " + PORT)
-
     
 
-    MongoClient.connect(URI, function(err, db) {
+    MongoClient.connect(URI,{useNewUrlParser: true, useUnifiedTopology: true}, function(err, db) {
         if(err) throw err;
         else{
             console.log("Mongo connected successfully");        
