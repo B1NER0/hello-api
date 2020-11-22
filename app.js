@@ -426,7 +426,7 @@ app.get('/getClientData/:id', (req, res) => {
 	
     console.log('File to read: ' + files);
 
-    textract.fromFileWithPath('./uploads/' + files[0], function(error, text) {
+    textract.fromFileWithPath('/uploads/' + files[0], function(error, text) {
         try{
             entityRecognition(textAnalyticsClient, text, res);
         }
