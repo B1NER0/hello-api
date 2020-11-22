@@ -17,6 +17,8 @@ const jwt = require('jsonwebtoken');
 const MongoClient = require('mongodb').MongoClient;
 const passwordHash = require('password-hash');
 const bodyParser = require('body-parser');
+const { parse } = require('path');
+const path = require('path');
 
 app.use(cors());
 app.use(express.json());
@@ -78,7 +80,7 @@ app.post('/login', async (req, res) => {
         try{
             if(passwordHash.verify(req.body.password, user.password)){
                 console.log(user.username + " logged in");
-                jwt.sign({user: user}, 'secretkey', { expiresIn: '10s'}, (err, token) => {
+                jwt.sign({user: user}, 'secretkey', { expiresIn: '10m'}, (err, token) => {
                     //redirect to homepage
                     res.json({
 						token,
@@ -298,32 +300,37 @@ function luhn_checksum(code) {
 
 async function entityRecognition(client, textToAnalyze, res){
 
-    const entityInputs = [textToAnalyze];
-    console.log(textToAnalyze);
-     //   "Here in Potchefstroom, Jack Coventry with 6011575233277578 a number an age of 18 years and Jill Huffey were both 0732436572 married Mark Johnson white males and christian and the others where muslims was going up the Hill. degenaarp@gmail.com They had an id of 9910295177084 and a number of 0739360709",
-       // "I live banking 4067240822588541 at 18 Rose street Gauteng with an id of 2001014800086"];
+    if(textToAnalyze.includes(',')){
+        var thisText = textToAnalyze.replace(/,/g,' ');
+    }
+    
+    const entityInputs = [thisText];
+      ///  ["Here in Potchefstroom, Jack Coventry with 6011575233277578 a number an age of 18 years and Jill Huffey were both 0732436572 married Mark Johnson white males and christian and the others where muslims was going up the Hill. degenaarp@gmail.com They had an id of 9910295177084 and a number of 0739360709",
+     //   "I live Martin, with id 4067240822588541 at 18 Rose street Gauteng with an id of 2001014800086"];
+
+
+
     const entityResults = await client.recognizeEntities(entityInputs);
 
-    //entityResults.forEach(document => {
-        //if(document !== undefined){
-            //console.log(`Document ID: ${document.id}`);
-        //   if(document.entities !== undefined){
-           //     document.entities.forEach(entity => {
-            //        if(entity.text !== undefined || entity.category !== undefined){
-                       // console.log(`\tName: ${entity.text} \tCategory: ${entity.category}`);
+    entityResults.forEach(document => {
+        if(document !== undefined){
+            console.log(`Document ID: ${document.id}`);
+           if(document.entities !== undefined){
+               document.entities.forEach(entity => {
+                    if(entity.text !== undefined || entity.category !== undefined){
+                        console.log(`\tName: ${entity.text} \tCategory: ${entity.category}`);
                     
-             //       }
-         //   })
-        //}
-   // }
-   // });
+                    }
+            })
+        }
+    }
+   });
 
     
 
     //Seperate into categories for further analysing
     
     entityResults.forEach(document => {
-        //console.log("________________________________HERE")
         if(document !== undefined){
             if(document.entities !== undefined){
                 document.entities.forEach(entity => {
@@ -349,6 +356,7 @@ async function entityRecognition(client, textToAnalyze, res){
 	console.log("--------DONE READING--------")
 	startSorting(res);
 }
+
 
 function startSorting(res){
     
@@ -385,6 +393,25 @@ function sendData(res){
 	
 	clearUploads();
 }
+
+app.get('/getClientData/:id', (req, res) => {
+    dbo.collection("classified_data").find({user_id: req.params.id}).toArray(function(err, result){
+        if(err) throw err;
+        var theArr = [];
+        theArr = result;
+        var sArray = [];
+        theArr.forEach(element => {            
+            element.data.forEach(el => {
+                if(!sArray.includes(el)){
+                    sArray.push(el)
+                }
+            })
+        })
+
+        console.log('Retrieved user records for client ID: ' + req.params.id)
+        res.status(200).send(sArray);
+    });
+});
 
 
  //Extract with Azure API and other algorithms
