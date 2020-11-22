@@ -29,7 +29,7 @@ app.use(fileUpload({
 }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8000;
 
 var URI = "mongodb://admin:admin@3.85.37.138/CMPG?retryWrites=true&w=majority"//"mongodb+srv://phil:Alfadelta4@cluster0.ibqct.mongodb.net/?retryWrites=true&w=majority";
 var dbo;
