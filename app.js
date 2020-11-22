@@ -168,14 +168,14 @@ app.post('/newUser', (req, res) => {
 //CLEAR uploads folder
 
 function clearUploads() {
-	fs.readdir('./uploads/', (err, files) => {
+	fs.readdir(uploadDir, (err, files) => {
 		if(err) {
 			console.log('Error removing uploads content')
 
 		};
 
 		for(const file of files) {
-			fs.unlink(path.join('./uploads/', file), err => {
+			fs.unlink(path.join(uploadDir, file), err => {
 				if(err){
 					console.log(err);
 				}
@@ -439,7 +439,7 @@ app.get('/getClientData/:id', (req, res) => {
 	})
 	
 
-	clearUploads();
+	//clearUploads();
 }
 }
 
