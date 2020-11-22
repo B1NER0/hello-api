@@ -32,14 +32,7 @@ const PORT = process.env.PORT || 8080;
 var URI = "mongodb+srv://phil:Alfadelta4@cluster0.ibqct.mongodb.net/?retryWrites=true&w=majority";
 var dbo;
 
-MongoClient.connect(URI, function(err, db) {
-    if(err) throw err;
-    else{
-        console.log("Mongo connected successfully");        
-    }   
-    
-    dbo = db.db("CMPG");
-});
+
 
 
 app.get('/system/reboot', (req, res) => {
@@ -448,14 +441,26 @@ app.get('/getClientData/:id', (req, res) => {
 }
 }
 
+
+
 app.listen(PORT, () => {
-    console.log("Listening on port " + PORT)
+    console.log("Listening on port with " + PORT)
+
+    
+    MongoClient.connect(URI, function(err, db) {
+        if(err) throw err;
+        else{
+            console.log("Mongo connected successfully");        
+        }   
+        
+        dbo = db.db("CMPG");
+    });
 })
 
 
+/*
 
-
-/*var port = process.env.PORT || 3000,
+var port = process.env.PORT || 3000,
     http = require('http'),
     fs = require('fs'),
     html = fs.readFileSync('index.html');

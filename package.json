@@ -10,6 +10,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.0",
     "forever": "^3.0.4",
+    "forever-monitor": "^3.0.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",
     "natural": "^2.1.5",
@@ -19,6 +20,6 @@
     "textract": "^2.5.0"
   },
   "scripts": {
-    "start": "forever start app.js"
+    "start": "forever app.js"
   }
 }
