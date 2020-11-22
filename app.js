@@ -29,7 +29,7 @@ app.use(fileUpload({
 }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 4000;
 
 var URI = "mongodb://admin:admin@3.85.37.138/CMPG?retryWrites=true&w=majority"//"mongodb+srv://phil:Alfadelta4@cluster0.ibqct.mongodb.net/?retryWrites=true&w=majority";
 var dbo;
@@ -303,9 +303,12 @@ async function entityRecognition(client, textToAnalyze, res){
 
     if(textToAnalyze.includes(',')){
         var thisText = textToAnalyze.replace(/,/g,' ');
+    }else{
+        var thisText = textToAnalyze;
     }
     
     const entityInputs = [thisText];
+    console.log(entityInputs)
       ///  ["Here in Potchefstroom, Jack Coventry with 6011575233277578 a number an age of 18 years and Jill Huffey were both 0732436572 married Mark Johnson white males and christian and the others where muslims was going up the Hill. degenaarp@gmail.com They had an id of 9910295177084 and a number of 0739360709",
      //   "I live Martin, with id 4067240822588541 at 18 Rose street Gauteng with an id of 2001014800086"];
 
@@ -354,8 +357,10 @@ async function entityRecognition(client, textToAnalyze, res){
         }
         
     })
-	console.log("--------DONE READING--------")
-	startSorting(res);
+    console.log("--------DONE READING--------")
+    startSorting(res);
+
+
 }
 
 
@@ -418,9 +423,27 @@ app.get('/getClientData/:id', (req, res) => {
 
  //Extract with Azure API and other algorithms
 
- function beginAnalyse(res){
+ function beginAnalyse(res, ext){
     var textract = require('textract');
+    var fs = require('fs');
+	var files = fs.readdirSync(uploadDir);
+	
+	if(files.length > 0){
+	
+    console.log('File to read: ' + files);
 
+    textract.fromFileWithPath(uploadDir +'/' + files[0], function(error, text) {
+        try{
+            entityRecognition(textAnalyticsClient, text, res);
+        }
+        catch(err){
+            console.log(err)
+        }
+    
+	})
+}
+
+/*
     var fs = require('fs');
 	var files = fs.readdirSync(uploadDir);
 	
@@ -440,7 +463,7 @@ app.get('/getClientData/:id', (req, res) => {
 	
 
 	//clearUploads();
-}
+}*/
 }
 
 app.listen(PORT, '0.0.0.0' , () => {
@@ -458,49 +481,3 @@ app.listen(PORT, '0.0.0.0' , () => {
 })
 
 
-/*
-
-var port = process.env.PORT || 3000,
-    http = require('http'),
-    fs = require('fs'),
-    html = fs.readFileSync('index.html');
-
-var log = function(entry) {
-    fs.appendFileSync('/tmp/sample-app.log', new Date().toISOString() + ' - ' + entry + '\n');
-};
-
-var server = http.createServer(function (req, res) {
-    if (req.method === 'POST') {
-        var body = '';
-
-        req.on('data', function(chunk) {
-            body += chunk;
-        });
-
-        req.on('end', function() {
-            if (req.url === '/') {
-                log('Received message: ' + body);
-            } else if (req.url = '/scheduled') {
-                log('Received task ' + req.headers['x-aws-sqsd-taskname'] + ' scheduled at ' + req.headers['x-aws-sqsd-scheduled-at']);
-            }
-
-            res.writeHead(200, 'OK', {'Content-Type': 'text/plain'});
-            res.end();
-        });
-    } else {
-        res.writeHead(200);
-        res.write(html);
-        res.end();
-    }
-
-    
-});
-
-
-
-// Listen on port 3000, IP defaults to 127.0.0.1
-server.listen(port);
-
-// Put a friendly message on the terminal
-console.log('Server running at http://127.0.0.1:' + port + '/');
-*/
