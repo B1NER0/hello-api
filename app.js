@@ -74,11 +74,12 @@ async function locateUser(theEmail) {
 app.post('/login', async (req, res) => {
     //Authenticate user
     const user = await authUser(req.body.email, req.body.password)
+  //const user = dbo.collection("Users").findOne({email: req.body.email})
    
-    if(user !== null)
+    if(user)
     {
         try{
-            if(passwordHash.verify(req.body.password, user.password)){
+            if(await passwordHash.verify(req.body.password, user.password)){
                 console.log(user.username + " logged in");
                 jwt.sign({user: user}, 'secretkey', { expiresIn: '10m'}, (err, token) => {
                     //redirect to homepage
@@ -143,7 +144,7 @@ app.get('/auth', verifyToken, (req, res) => {
 //Add new user to database with hashed password
 app.post('/newUser', (req, res) => {
     try{
-        var hPass = passwordHash.generate('testing');
+        var hPass = passwordHash.generate(req.body.password);
 
         const user = {
             username: req.body.username,
