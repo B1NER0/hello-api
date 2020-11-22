@@ -198,7 +198,7 @@ app.post('/upload', async (req, res) => {
 
             let doc = req.files.file;
 
-            doc.mv('./uploads/' + doc.name);
+            doc.mv(uploadDir + '/' + doc.name);
 
             //send response
             res.send({
