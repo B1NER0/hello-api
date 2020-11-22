@@ -388,6 +388,7 @@ function sendData(res){
 
     console.log('Finished analysing data');
    // console.log(dataToSend);
+   res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(dataToSend);
     resetArrays();
     //console.log(dataToSend);
