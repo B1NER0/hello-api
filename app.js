@@ -448,6 +448,7 @@ app.get('/getClientData/:id', (req, res) => {
 app.listen(PORT, '0.0.0.0' , () => {
     console.log("Listening on port with " + PORT)
 
+    clearUploads();
     
     MongoClient.connect(URI, function(err, db) {
         if(err) throw err;
